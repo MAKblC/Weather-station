@@ -1,5 +1,4 @@
-#define BLYNK_PRINT Serial
-
+//Необходимые библиотеки для Blynk  и датчиков
 #define BLYNK_PRINT Serial
 #include <WiFi.h>
 #include <WiFiClient.h>
@@ -11,6 +10,7 @@
 #include <VEML6075.h>
 VEML6075 veml6075;
 #include <SPI.h>  
+
 // Точка доступа Wi-Fi
 char ssid[] = "MGBot";
 char pass[] = "Terminator812";
@@ -150,7 +150,7 @@ void readSensorBH1750()
   Serial.println("light");
 }
 
-// Чтение датчика BME280
+// Чтение датчика BME280, VEML6075 и отправка данных на сервер
 void readSensorBME280()
 {
   veml6075.poll();
