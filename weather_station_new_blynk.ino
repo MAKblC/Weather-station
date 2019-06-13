@@ -8,9 +8,11 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 #include <BH1750FVI.h>
+#include <VEML6075.h>
+VEML6075 veml6075;
 #include <SPI.h>  
 // Точка доступа Wi-Fi
-char ssid[] = "IOTIK";
+char ssid[] = "MGBot";
 char pass[] = "Terminator812";
 
 // API key для Blynk
@@ -87,7 +89,8 @@ void setup()
   // Инициализация последовательного порта
   Serial.begin(115200);
   delay(512);
-
+ if (!veml6075.begin())
+    Serial.println("VEML6075 not found!");
   // Инициализация Blynk и Wi-Fi
   Serial.println();
   Serial.print("Connecting to ");
@@ -150,6 +153,13 @@ void readSensorBH1750()
 // Чтение датчика BME280
 void readSensorBME280()
 {
+  veml6075.poll();
+  float uva = veml6075.getUVA();
+  float uvb = veml6075.getUVB();
+  float uv_index = veml6075.getUVIndex();
+   Blynk.virtualWrite(V6, uva); delay(25);
+   Blynk.virtualWrite(V7, uvb); delay(25);
+   Blynk.virtualWrite(V8, uv_index); delay(25);
   float p = 0;
   Wire.begin(21, 22);         // Инициализация I2C на выводах 4, 5
   Wire.setClock(10000L);    // Снижение тактовой частоты для надежности
