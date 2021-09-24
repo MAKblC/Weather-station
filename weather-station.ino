@@ -30,10 +30,10 @@ BH1750FVI bh1750;
 Adafruit_BME280 bme280;
 
 // Датчик дождя
-#define RAIN_PIN 13
+#define RAIN_PIN 13 //4 (в зависимости от сборки)
 
 // Датчик скорости ветра
-#define WINDSPD_PIN 4
+#define WINDSPD_PIN 4 // 13 (в зависимости от сборки)
 
 // Датчик направления ветра
 #define WINDDIR_PIN 34             
