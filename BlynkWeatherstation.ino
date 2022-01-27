@@ -12,11 +12,11 @@ VEML6075 veml6075;
 #include <SPI.h>  
 
 // Точка доступа Wi-Fi
-char ssid[] = "MGBot";
-char pass[] = "Terminator812";
+char ssid[] = "XXXXXXXX";
+char pass[] = "XXXXXXXX";
 
 // API key для Blynk
-char auth[] = "073f88d5cffa475484641e3018533442";
+char auth[] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 IPAddress blynk_ip(139, 59, 206, 133);            // конфигурация блинка // Blynk configuration
 
 
