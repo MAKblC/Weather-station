@@ -3,6 +3,7 @@
 #include <Adafruit_BME280.h>
 #include <BH1750FVI.h>
 #include <VEML6075.h>
+#include "MCP3221.h"
 
 #include <WiFiClient.h>
 #include <BlynkSimpleEsp32.h>
@@ -18,8 +19,19 @@
 
 #define LED 4 // ЙоТик 32А, 18 - ЙоТик 32В
 
-// Датчик ультрафиолета
+// Выберите датчик УФ вашей сборки (ненужное занесите в комментарии)
+// #define MGS_GUVA 1
+#define MGS_UV60 1
+
+// Датчик УФ
+#ifdef MGS_GUVA
+const byte DEV_ADDR = 0x4F;  // 0x5С , 0x4D (также попробуйте просканировать адрес: https://github.com/MAKblC/Codes/tree/master/I2C%20scanner)
+MCP3221 mcp3221(DEV_ADDR);
+#endif
+#ifdef MGS_UV60
 VEML6075 veml6075;
+#endif
+
 // Датчик освещенности
 BH1750FVI LightSensor_1;
 // Датчик температуры/влажности и атмосферного давления
@@ -88,8 +100,13 @@ void setup()
   Serial.print("\nWiFi connected. IP address: ");
   Serial.println(WiFi.localIP());
 
+#ifdef MGS_UV60
   if (!veml6075.begin())
     Serial.println("VEML6075 not found!");
+#endif
+#ifdef MGS_GUVA
+  mcp3221.setVinput(VOLTAGE_INPUT_5V);
+#endif
   bool bme_status = bme280.begin();
   if (!bme_status)
     Serial.println("Could not find a valid BME280 sensor, check wiring!");
@@ -143,12 +160,20 @@ void handleNewMessages(int numNewMessages)
     if ((text == "/sensors") || (text == "sensors"))
     {
       readSensorWINDDIR();
-
+#ifdef MGS_UV60
       veml6075.poll();
       float uva = veml6075.getUVA();
       float uvb = veml6075.getUVB();
       float uv_index = veml6075.getUVIndex();
-
+#endif
+#ifdef MGS_GUVA
+      float sensorVoltage;
+      float sensorValue;
+      float UV_index;
+      sensorValue = mcp3221.getVoltage();
+      sensorVoltage = 1000 * (sensorValue / 4096 * 5.0); // напряжение на АЦП
+      UV_index = 370 * sensorVoltage / 200000; // Индекс УФ (эмпирическое измерение)
+#endif
       float t = bme280.readTemperature();
       float h = bme280.readHumidity();
       float p = bme280.readPressure() / 100.0F;
@@ -160,9 +185,15 @@ void handleNewMessages(int numNewMessages)
       welcome += "Hum: " + String(h, 0) + " %\n";
       welcome += "Press: " + String(p, 0) + " hPa\n";
       welcome += "Light: " + String(l, 0) + " Lx\n";
+#ifdef MGS_GUVA
+      welcome += "sensorVoltage: " + String(sensorVoltage, 0) + " mV\n";
+      welcome += "UVIndex: " + String(UV_index, 0) + " \n";
+#endif
+#ifdef MGS_UV60
       welcome += "UVA: " + String(uva, 0) + " mkWt/cm2\n";
       welcome += "UVB: " + String(uvb, 0) + " mkWt/cm2\n";
       welcome += "UVIndex: " + String(uv_index, 0) + " \n";
+#endif
       welcome += "Wind direction: " + wind_dir_text + " " + String(wdir, 1) + " deg\n";
       welcome += "Wind speed: " + String(wspeed, 1) + " m/s\n";
       welcome += "Rain level: " + String(rain, 1) + " mm\n";
