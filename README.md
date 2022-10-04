@@ -20,5 +20,6 @@
 | VEML6075.zip   |библиотека для MGS-UV60|
 | BlynkNewWeatherStation.ino  |скетч для Blynk новой версии|
 | BlynkWeatherstation.ino   | скетч для Blynk старой версии|
+| MCP3221_modified.zip   | библиотека для MGS-GUVA|
 | Weatherstation_telegram.ino | скетч для Telegram|
 | testmeteo.ino  | скетч для тестирования устройств|
