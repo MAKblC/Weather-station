@@ -8,7 +8,20 @@
 #include <Adafruit_BME280.h>
 #include <BH1750FVI.h>
 #include <VEML6075.h>
+#include "MCP3221.h"
+
+// Выберите датчик УФ вашей сборки (ненужное занесите в комментарии)
+// #define MGS_GUVA 1
+#define MGS_UV60 1
+
+// Датчик УФ
+#ifdef MGS_GUVA
+const byte DEV_ADDR = 0x4F;  // 0x5С , 0x4D (также попробуйте просканировать адрес: https://github.com/MAKblC/Codes/tree/master/I2C%20scanner)
+MCP3221 mcp3221(DEV_ADDR);
+#endif
+#ifdef MGS_UV60
 VEML6075 veml6075;
+#endif
 
 #define BLYNK_TEMPLATE_ID "XXXXXXXX"
 #define BLYNK_DEVICE_NAME "XXXXXXXX"
@@ -83,8 +96,14 @@ void setup()
   // Инициализация последовательного порта
   Serial.begin(115200);
   delay(512);
+  
+  #ifdef MGS_UV60
   if (!veml6075.begin())
     Serial.println("VEML6075 not found!");
+#endif
+#ifdef MGS_GUVA
+  mcp3221.setVinput(VOLTAGE_INPUT_5V);
+#endif
     
   // Инициализация Blynk и Wi-Fi
   Serial.println();
@@ -145,6 +164,7 @@ void readSensorBH1750()
 // Чтение датчика BME280, VEML6075 и отправка данных на сервер
 void readSensorBME280()
 {
+  #ifdef MGS_UV60
   veml6075.poll();
   float uva = veml6075.getUVA();
   float uvb = veml6075.getUVB();
@@ -152,6 +172,17 @@ void readSensorBME280()
   Blynk.virtualWrite(V6, uva); delay(25);
   Blynk.virtualWrite(V7, uvb); delay(25);
   Blynk.virtualWrite(V8, uv_index); delay(25);
+  #endif
+  #ifdef MGS_GUVA
+  float sensorVoltage;
+  float sensorValue;
+  float UV_index;
+  sensorValue = mcp3221.getVoltage();
+  sensorVoltage = 1000 * (sensorValue / 4096 * 5.0); // напряжение на АЦП
+  UV_index = 370 * sensorVoltage / 200000; // Индекс УФ (эмпирическое измерение)
+  Blynk.virtualWrite(V6, sensorVoltage); delay(25);
+  Blynk.virtualWrite(V8, UV_index); delay(25);
+  #endif
   float p = 0;
   Wire.begin(21, 22);         // Инициализация I2C на выводах 4, 5
   Wire.setClock(10000L);    // Снижение тактовой частоты для надежности
