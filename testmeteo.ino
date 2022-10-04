@@ -1,4 +1,3 @@
-//Необходимые библиотеки для Blynk  и датчиков
 #define BLYNK_PRINT Serial
 #include <WiFi.h>
 #include <WiFiClient.h>
@@ -8,8 +7,20 @@
 #include <Adafruit_BME280.h>
 #include <BH1750FVI.h>
 #include <VEML6075.h>
+#include "MCP3221.h"
+
+// Выберите датчик УФ вашей сборки (ненужное занесите в комментарии)
+// #define MGS_GUVA 1
+#define MGS_UV60 1
+
+// Датчик УФ
+#ifdef MGS_GUVA
+const byte DEV_ADDR = 0x4F;  // 0x5С , 0x4D (также попробуйте просканировать адрес: https://github.com/MAKblC/Codes/tree/master/I2C%20scanner)
+MCP3221 mcp3221(DEV_ADDR);
+#endif
+#ifdef MGS_UV60
 VEML6075 veml6075;
-#include <SPI.h>
+#endif
 
 // Датчик освещенности
 BH1750FVI bh1750;
@@ -18,10 +29,10 @@ BH1750FVI bh1750;
 Adafruit_BME280 bme280;
 
 // Датчик дождя
-#define RAIN_PIN 13 // 4 
+#define RAIN_PIN 4 // 4 
 
 // Датчик скорости ветра
-#define WINDSPD_PIN 4 // 13
+#define WINDSPD_PIN 13 // 13
 
 // Датчик направления ветра
 #define WINDDIR_PIN 34
@@ -61,8 +72,13 @@ void setup()
   // Инициализация последовательного порта
   Serial.begin(115200);
   delay(512);
+#ifdef MGS_UV60
   if (!veml6075.begin())
     Serial.println("VEML6075 not found!");
+#endif
+#ifdef MGS_GUVA
+  mcp3221.setVinput(VOLTAGE_INPUT_5V);
+#endif
   // Инициализация входов датчиков дождя и скорости ветра
   pinMode(RAIN_PIN, INPUT_PULLUP);
   pinMode(WINDSPD_PIN, INPUT_PULLUP);
@@ -103,6 +119,7 @@ void readSensorBH1750()
 // Чтение датчика BME280, VEML6075
 void readSensorBME280()
 {
+#ifdef MGS_UV60
   veml6075.poll();
   float uva = veml6075.getUVA();
   float uvb = veml6075.getUVB();
@@ -110,6 +127,17 @@ void readSensorBME280()
   Serial.println("UVA " + String(uva, 1));
   Serial.println("UVB " + String(uvb, 1));
   Serial.println("UVI " + String(uv_index, 1));
+#endif
+#ifdef MGS_GUVA
+  float sensorVoltage;
+  float sensorValue;
+  float UV_index;
+  sensorValue = mcp3221.getVoltage();
+  sensorVoltage = 1000 * (sensorValue / 4096 * 5.0); // напряжение на АЦП
+  UV_index = 370 * sensorVoltage / 200000; // Индекс УФ (эмпирическое измерение)
+  Serial.println("Выходное напряжение = " + String(sensorVoltage, 1) + "мВ");
+  Serial.println("UV index = " + String(UV_index, 1));
+#endif
   Wire.begin(21, 22);         // Инициализация I2C на выводах 4, 5
   Wire.setClock(10000L);    // Снижение тактовой частоты для надежности
   bme280.begin();           // Инициализация датчика
@@ -135,7 +163,7 @@ void readSensorWINDDIR()
 {
   double sensval = analogRead(34) * 5.0 / 1023.0;
   double delta = 0.2;
-  float wdir =0;
+  float wdir = 0;
   String wind_dir_text = "";
   if (sensval >= 11.4 && sensval < 12.35) {
     wdir = 0.0; // N
