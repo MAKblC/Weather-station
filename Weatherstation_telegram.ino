@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
-#include <BH1750FVI.h>
+#include <BH1750.h>
 #include <VEML6075.h>
 #include "MCP3221.h"
 
@@ -33,7 +33,7 @@ VEML6075 veml6075;
 #endif
 
 // Датчик освещенности
-BH1750FVI LightSensor_1;
+BH1750 lightMeter;
 // Датчик температуры/влажности и атмосферного давления
 Adafruit_BME280 bme280;
 
@@ -110,8 +110,8 @@ void setup()
   bool bme_status = bme280.begin();
   if (!bme_status)
     Serial.println("Could not find a valid BME280 sensor, check wiring!");
-  LightSensor_1.begin();
-  LightSensor_1.setMode(Continuously_High_Resolution_Mode);
+ 
+  lightMeter.begin();
 
   // Инициализация входов датчиков дождя и скорости ветра
   pinMode(RAIN_PIN, INPUT_PULLUP);
@@ -178,13 +178,13 @@ void handleNewMessages(int numNewMessages)
       float h = bme280.readHumidity();
       float p = bme280.readPressure() / 100.0F;
 
-      float l = LightSensor_1.getAmbientLight();
+      float l = lightMeter.readLightLevel();
 
       String welcome = "Показания датчиков:\n";
       welcome += "Temp: " + String(t, 1) + " C\n";
       welcome += "Hum: " + String(h, 0) + " %\n";
       welcome += "Press: " + String(p, 0) + " hPa\n";
-      welcome += "Light: " + String(l, 0) + " Lx\n";
+      welcome += "Light: " + String(l) + " Lx\n";
 #ifdef MGS_GUVA
       welcome += "sensorVoltage: " + String(sensorVoltage, 0) + " mV\n";
       welcome += "UVIndex: " + String(UV_index, 0) + " \n";
