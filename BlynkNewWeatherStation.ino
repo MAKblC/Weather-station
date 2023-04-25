@@ -6,7 +6,7 @@
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
-#include <BH1750FVI.h>
+#include <BH1750.h>
 #include <VEML6075.h>
 #include "MCP3221.h"
 
@@ -32,7 +32,7 @@ char pass[] = "XXXXXXXXX"; // пароль Wi-Fi
 char auth[] = BLYNK_AUTH_TOKEN;
 
 // Датчик освещенности
-BH1750FVI bh1750;
+BH1750 lightMeter;
 
 // Датчик температуры/влажности и атмосферного давления
 Adafruit_BME280 bme280;
@@ -153,10 +153,9 @@ void readSensorBH1750()
 {
   Wire.begin(21, 22);        // Инициализация I2C на выводах 0, 2
   Wire.setClock(10000L);   // Снижение тактовой частоты для надежности
-  bh1750.begin();           // Инициализация датчика
+  lightMeter.begin();           // Инициализация датчика
   delay(128);
-  bh1750.setMode(Continuously_High_Resolution_Mode); // Установка разрешения датчика
-  sensorValues[sun_light] = bh1750.getAmbientLight();
+  sensorValues[sun_light] = lightMeter.readLightLevel();
   Blynk.virtualWrite(V3, sensorValues[sun_light]); delay(25);
   Serial.println("light");
 }
