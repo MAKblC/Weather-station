@@ -176,27 +176,27 @@ void handleNewMessages(int numNewMessages)
 #endif
       float t = bme280.readTemperature();
       float h = bme280.readHumidity();
-      float p = bme280.readPressure() / 100.0F;
+      float p = bme280.readPressure() / 133.3F;
 
       float l = lightMeter.readLightLevel();
 
       String welcome = "Показания датчиков:\n";
-      welcome += "Temp: " + String(t, 1) + " C\n";
-      welcome += "Hum: " + String(h, 0) + " %\n";
-      welcome += "Press: " + String(p, 0) + " hPa\n";
-      welcome += "Light: " + String(l) + " Lx\n";
+      welcome += "🌡 Температура воздуха: " + String(t, 1) + " °C\n";
+      welcome += "💧 Влажность воздуха: " + String(h, 0) + " %\n";
+      welcome += "☁ Атмосферное давление: " + String(p, 0) + " мм рт.ст.\n";
+      welcome += "☀ Освещенность: " + String(l) + " Лк\n";
 #ifdef MGS_GUVA
-      welcome += "sensorVoltage: " + String(sensorVoltage, 0) + " mV\n";
-      welcome += "UVIndex: " + String(UV_index, 0) + " \n";
+      welcome += "📊 Уровень УФ: " + String(sensorVoltage, 0) + " mV\n";
+      welcome += "🔆 Индекс УФ: " + String(UV_index, 0) + " \n";
 #endif
 #ifdef MGS_UV60
-      welcome += "UVA: " + String(uva, 0) + " mkWt/cm2\n";
-      welcome += "UVB: " + String(uvb, 0) + " mkWt/cm2\n";
-      welcome += "UVIndex: " + String(uv_index, 0) + " \n";
+      welcome += "🅰 Ультрафиолет-А " + String(uva, 0) + " mkWt/cm2\n";
+      welcome += "🅱 Ультрафиолет-В: " + String(uvb, 0) + " mkWt/cm2\n";
+      welcome += "🔆 Индекс УФ: " + String(uv_index, 0) + " \n";
 #endif
-      welcome += "Wind direction: " + wind_dir_text + " " + String(wdir, 1) + " deg\n";
-      welcome += "Wind speed: " + String(wspeed, 1) + " m/s\n";
-      welcome += "Rain level: " + String(rain, 1) + " mm\n";
+      welcome += "🎏 Направление ветра " + wind_dir_text + " " + String(wdir, 1) + " °\n";
+      welcome += "💨 Скорость ветра: " + String(wspeed, 1) + " м/с\n";
+      welcome += "☔️ Уровень осадков: " + String(rain, 1) + " мм\n";
       bot.sendMessage(chat_id, welcome, "Markdown");
     }
 
