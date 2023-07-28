@@ -3,7 +3,7 @@
 Набор "Школьная метеостанция ЙоТик М2" предназначен для изучения основных понятий о технологии Интернет-вещей (IoT). 
 Набор позволяет осуществлять мониторинг метеорологических данных и отправлять эти значения в выбранную Вами платформу IoT.
 
-![meteo](https://mgbot.ru/upload/iblock/3ed/3edb7541760b25de00114827277a0bcf.jpg)
+![meteo](https://mgbot.ru/upload/iblock/062/fxq0rksa2v9k6tsp2ko71kifkftyu17y.jpg)
 
 [Ссылка на сайте производителя](https://mgbot.ru/catalog/obrazovatelnye_nabory_iot/nabor_shkolnaya_meteostantsiya_yotik_m2/)
 
