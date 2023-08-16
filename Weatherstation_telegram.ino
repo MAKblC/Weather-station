@@ -1,3 +1,7 @@
+/*
+Не забудьте поправить настройки и адреса устройств в зависимости от комплектации!  
+*/
+
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
