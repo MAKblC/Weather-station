@@ -1,3 +1,7 @@
+/*
+Не забудьте поправить настройки и адреса устройств в зависимости от комплектации!  
+*/
+
 #define BLYNK_PRINT Serial
 #include <WiFi.h>
 #include <WiFiClient.h>
@@ -29,10 +33,10 @@ BH1750 lightMeter;
 Adafruit_BME280 bme280;
 
 // Датчик дождя
-#define RAIN_PIN 4 // 4 
+#define RAIN_PIN 4 
 
 // Датчик скорости ветра
-#define WINDSPD_PIN 13 // 13
+#define WINDSPD_PIN 13 
 
 // Датчик направления ветра
 #define WINDDIR_PIN 34
