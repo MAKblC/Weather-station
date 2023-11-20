@@ -164,7 +164,7 @@ void readSensorWINDSPD()
 // Чтение датчика направления ветра
 void readSensorWINDDIR()
 {
-  double sensval = analogRead(34) * 5.0 / 1023.0;
+  double sensval = analogRead(34) * 5.0 / 1023.0; // может потребоваться калибровка, если значения не совпадают
   double delta = 0.2;
   float wdir = 0;
   String wind_dir_text = "";
