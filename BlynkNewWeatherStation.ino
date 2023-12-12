@@ -189,7 +189,13 @@ void readSensorBME280()
   float p = 0;
   Wire.begin(21, 22);         // Инициализация I2C на выводах 4, 5
   Wire.setClock(10000L);    // Снижение тактовой частоты для надежности
-  bme280.begin();           // Инициализация датчика
+  bool bme_status = bme280.begin();
+  if (!bme_status) {
+    Serial.println("Не найден по адресу 0х77, пробую другой...");
+    bme_status = bme280.begin(0x76);
+    if (!bme_status)
+      Serial.println("Датчик не найден, проверьте соединение");
+  }
   delay(128);
   sensorValues[air_temp] = bme280.readTemperature();
   sensorValues[air_hum] = bme280.readHumidity();
