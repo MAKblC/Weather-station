@@ -21,6 +21,7 @@
 | MCP3221_modified.zip   | библиотека для MGS-GUVA|
 |SimpleTimer.zip   | библиотека для таймера |
 | VEML6075.zip   |библиотека для MGS-UV60|
+| meteostationDemo.ino  |скетч для локального сервера|
 | BlynkNewWeatherStation.ino  |скетч для Blynk новой версии|
 | Weatherstation_telegram.ino | скетч для Telegram|
 | testmeteo.ino  | скетч для тестирования устройств|
