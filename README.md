@@ -18,6 +18,7 @@
 | Adafruit_BME280_Library.zip      | библиотека для MGS-THP80 |
 | Adafruit_Unified_Sensor.zip     | библиотека для MGS-THP80 |
 | BH1750-master.zip    | библиотека для MGS-L75 |
+| GyverPortal.zip   | библиотека для локального сервера|
 | MCP3221_modified.zip   | библиотека для MGS-GUVA|
 |SimpleTimer.zip   | библиотека для таймера |
 | VEML6075.zip   |библиотека для MGS-UV60|
