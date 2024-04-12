@@ -2,13 +2,13 @@
 #include <HTTPClient.h>
 #include "time.h"
 const char* ntpServer = "pool.ntp.org";  // отсюда считается текущие дата/время
-const long gmtOffset_sec = 10800;
+const long gmtOffset_sec = 10800; // отклонение от Гринвича в 3 часа
 const int daylightOffset_sec = 0;
-// WiFi credentials
+//Логин/пароль WiFI, ID скрипта
 const char* ssid = "MGBot";              // логин Wi-Fi
 const char* password = "Terminator812";  // пароль Wi-Fi
-// Google script ID and required credentials
-String GOOGLE_SCRIPT_ID = "AKfycbypEpOD8OYJozXTMuHR0OXfrKoc8dQMrg1aisMw8To_JhydYxH-4GLnBE9kGq5jS5nv";  // Script ID
+
+String GOOGLE_SCRIPT_ID = "AKfXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXnv";  // Google Script ID
 int count = 0;
 int wdir = 0;
 String wind_dir_text = "";
@@ -112,6 +112,7 @@ void loop() {
       Serial.println("Failed to obtain time");
       return;
     }
+    // собираем сообщение для публикации
     String urlFinal = "https://script.google.com/macros/s/" + GOOGLE_SCRIPT_ID + "/exec?";
 
     char timeStringBuff[50];                                                           //50 chars should be enough
@@ -196,8 +197,7 @@ void loop() {
     urlFinal += "&press=" + String(press, 1);
     float hum = bme280.readHumidity();
     urlFinal += "&hum=" + String(hum, 1);
-
-    //String urlFinal = "https://script.google.com/macros/s/" + GOOGLE_SCRIPT_ID + "/exec?" + "date=" + asString + "&sensor=" + String(count);  // запрос, составленный также, как и в ручном режиме (пункт 8 урока)
+    
     Serial.print("POST data to spreadsheet:");
     Serial.println(urlFinal);
     HTTPClient http;
@@ -207,7 +207,6 @@ void loop() {
     Serial.print("HTTP Status Code: ");
     Serial.println(httpCode);
     //---------------------------------------------------------------------
-    //getting response from google sheet
     String payload;
     if (httpCode > 0) {
       payload = http.getString();
