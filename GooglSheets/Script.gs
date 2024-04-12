@@ -1,4 +1,4 @@
-var sheet_id = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; // ID скрипта
+var sheet_id = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; // URL таблицы
 var sheet_name = "ESP_Sensor"; // имя листа
 function doGet(e){
 var ss = SpreadsheetApp.openById(sheet_id);
