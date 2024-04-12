@@ -1,3 +1,5 @@
+// пример таблицы: https://docs.google.com/spreadsheets/d/1aojAxZHfoVWcr8SG2ojG8BqhbeFv1esXgggSlievwaE/edit#gid=0
+
 var sheet_id = "1aojAxZHfoVWcr8SG2ojG8BqhbeFv1esXgggSlievwaE"; // URL таблицы
 var sheet_name = "ESP_Sensor"; // имя листа
 function doGet(e){
