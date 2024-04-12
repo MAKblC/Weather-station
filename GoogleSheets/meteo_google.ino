@@ -5,8 +5,8 @@ const char* ntpServer = "pool.ntp.org";  // отсюда считается те
 const long gmtOffset_sec = 10800; // отклонение от Гринвича в 3 часа
 const int daylightOffset_sec = 0;
 //Логин/пароль WiFI, ID скрипта
-const char* ssid = "MGBot";              // логин Wi-Fi
-const char* password = "Terminator812";  // пароль Wi-Fi
+const char* ssid = "XXXXX";              // логин Wi-Fi
+const char* password = "XXXXXXXXXXXX";  // пароль Wi-Fi
 
 String GOOGLE_SCRIPT_ID = "AKfXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXnv";  // Google Script ID
 int count = 0;
